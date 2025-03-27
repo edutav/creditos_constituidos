@@ -62,3 +62,33 @@ Com isso, os serviços essenciais para o funcionamento do projeto estarão em ex
 
 ### Backend
 ![Texto Alternativo](img/api.png)
+
+### Visualizando dados do Kafka
+
+Para visualizar os dados no tópico do Kafka, você pode entrar no terminal do container Kafka e usar o console consumer.
+
+1.  Liste os containers em execução para encontrar o nome do container Kafka (geralmente algo como `kafka_1`):
+
+    ```bash
+    docker ps
+    ```
+
+2.  Entre no terminal do container Kafka:
+
+    ```bash
+    docker exec -it kafka-creditos /bin/bash
+    ```
+
+3.  Liste todos os tópicos disponíveis:
+
+    ```bash
+    kafka-topics.sh --list --bootstrap-server localhost:9092
+    ```
+
+4.  Execute o console consumer do Kafka, para inspecionar:
+
+    ```bash
+    kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic consulta-creditos --from-beginning
+    ```
+
+    Isso exibirá as mensagens no tópico do Kafka no seu terminal.
