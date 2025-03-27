@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: credits
+      POSTGRES_PASSWORD: credits
+      POSTGRES_DB: credits_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - data-credits:/var/lib/postgresql/data
+    networks:
+      - network-credits
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - network-credits
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - network-credits
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - kafka
+    networks:
+      - network-credits
+
+  frontend:
+   build:
+     context: ./app
+     dockerfile: Dockerfile
+   ports:
+     - "80:80"
+   depends_on:
+     - api
+   networks:
+     - network-credits
+
+volumes:
+  data-credits:
+
+networks:
+  network-credits:
+    driver: bridge
