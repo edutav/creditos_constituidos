@@ -1,0 +1,123 @@
+<div class="min-h-screen bg-gray-100 flex flex-col">
+  <header class="bg-white shadow-md py-4">
+    <div class="container mx-auto px-4">
+      <h1 class="text-2xl font-bold text-gray-800">Pesquisa de Créditos</h1>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-6 px-4 flex-grow">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <fieldset class="mb-8 border rounded-md p-4">
+        <legend class="text-lg font-semibold mb-4">Buscar por NFS-e</legend>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Número NFS-e:</label>
+          <input
+            type="text"
+            [(ngModel)]="numeroNfse"
+            class="mt-1 p-2 border rounded w-full"
+          />
+          <button
+            (click)="buscarCreditosPorNfse()"
+            class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Buscar por NFS-e
+          </button>
+          <p *ngIf="erroNfse" class="text-red-500">{{ erroNfse }}</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="border rounded-md p-4">
+        <legend class="text-lg font-semibold mb-4">Buscar por Número de Crédito</legend>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Número Crédito:</label>
+          <input
+            type="text"
+            [(ngModel)]="numeroCredito"
+            class="mt-1 p-2 border rounded w-full"
+          />
+          <button
+            (click)="buscarCreditoPorNumero()"
+            class="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Buscar por Número Crédito
+          </button>
+          <p *ngIf="erroCredito" class="text-red-500">{{ erroCredito }}</p>
+        </div>
+      </fieldset>
+
+      <div *ngIf="(creditosNfse.length > 0) || creditoDetalhe" class="mt-8">
+        <h3 class="text-xl font-semibold mb-4">Resultados da Pesquisa:</h3>
+        <div class="overflow-x-auto">
+        <table class="min-w-full leading-normal shadow-md rounded-lg overflow-hidden">
+          <thead class="bg-gray-200 text-gray-700">
+            <tr>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Número Crédito
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Número NFS-e
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Data Constituição
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Valor ISSQN
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Tipo Crédito
+              </th>
+               <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Simples Nacional
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Aliquota
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Valor Faturado
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Valor Dedução
+              </th>
+              <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">
+                Base Calculo
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            <tr *ngIf="creditoDetalhe">
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.numeroCredito }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.numeroNfse }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.dataConstituicao }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.valorIssqn }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.tipoCredito }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.simplesNacional }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.aliquota }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.valorFaturado }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.valorDeducao }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ creditoDetalhe.baseCalculo }}</td>
+            </tr>
+            <tr *ngFor="let credito of creditosNfse">
+               <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.numeroCredito }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.numeroNfse }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.dataConstituicao }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.valorIssqn }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.tipoCredito }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.simplesNacional }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.aliquota }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.valorFaturado }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.valorDeducao }}</td>
+              <td class="px-5 py-5 border-b border-gray-200 text-sm">{{ credito.baseCalculo }}</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-gray-200 py-4 mt-8">
+    <div class="container mx-auto px-4 text-center text-gray-600">
+      © {{ anoagora | date: 'yyyy' }} Sistema de Pesquisa de Créditos
+    </div>
+  </footer>
+</div>
