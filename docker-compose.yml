@@ -49,16 +49,19 @@ services:
     networks:
       - network-credits
 
-  frontend:
-   build:
-     context: ./app
-     dockerfile: Dockerfile
-   ports:
-     - "80:80"
-   depends_on:
-     - api
-   networks:
-     - network-credits
+  # frontend:
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - api
+  #   networks:
+  #     - network-credits
+  #   links:
+  #     - api
+   
 
 volumes:
   data-credits:
